@@ -141,7 +141,20 @@ export async function settlePayment(
 
 /** Poll fallback for every pending payment — callbacks are best-effort. */
 export async function reconcilePending(minAgeMs = 5_000): Promise<number> {
-  const pending = await paymentsRepo.listPending(minAgeMs);
+  return settleFromProvider(await paymentsRepo.listPending(minAgeMs));
+}
+
+/**
+ * The same reconcile, narrowed to one plan. A caller who has just started a
+ * collection can ask how it resolved without touching every other plan's
+ * schedule the way a full tick does.
+ */
+export async function reconcilePlan(planId: string): Promise<number> {
+  const payments = await paymentsRepo.listByPlan(planId);
+  return settleFromProvider(payments.filter((p) => p.status === 'pending'));
+}
+
+async function settleFromProvider(pending: Payment[]): Promise<number> {
   let settled = 0;
 
   for (const payment of pending) {

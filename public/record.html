@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Your repayment record — MoMo Own It</title>
+    <link rel="stylesheet" href="/styles.css" />
+  </head>
+  <body>
+    <header class="topbar">
+      <div class="brand-mark"><span class="dot">M</span> MoMo Own It</div>
+      <div class="session-chip">
+        <a class="btn btn-ghost" href="/shop">Shop</a>
+        <a class="btn btn-ghost" href="/dashboard">Your plans</a>
+        <span>Signed in as <span class="msisdn" id="session-msisdn">—</span></span>
+        <button class="btn btn-ghost" type="button" id="sign-out">Sign out</button>
+      </div>
+    </header>
+
+    <main class="page">
+      <a class="back-link" href="/dashboard">Back to your plans</a>
+
+      <h1>Your repayment record</h1>
+      <p class="lede">
+        A record of what you actually paid, derived from your plans rather than written about you.
+        It is not a score and not a decision — and it is yours to take anywhere.
+      </p>
+
+      <div class="alert" id="record-alert" role="alert" aria-live="assertive"></div>
+      <p class="items-status" id="record-status" role="status" aria-live="polite">Loading your record…</p>
+
+      <div class="panel-grid" id="record-cards"></div>
+
+      <div id="record-actions" hidden>
+        <a class="btn btn-wide" id="record-download" href="#" download>Download my copy</a>
+        <p class="demo-note">
+          <strong>Yours, not ours.</strong>
+          The download is a self-contained document you can hand to a bank, a landlord or a lender —
+          on your terms, if you choose to. We never send it anywhere on your behalf.
+        </p>
+      </div>
+    </main>
+
+    <script src="/js/session.js"></script>
+    <script src="/js/api.js"></script>
+    <script src="/js/record.js"></script>
+  </body>
+</html>

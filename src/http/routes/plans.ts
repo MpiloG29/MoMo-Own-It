@@ -79,6 +79,14 @@ demoRouter.post(
   }),
 );
 
+/** Ask MoMo how one plan's in-flight collection resolved. */
+demoRouter.post(
+  '/demo/plans/:id/settle',
+  asyncHandler(async (req, res) => {
+    res.json({ settled: await collectionService.reconcilePlan(param(req, 'id')) });
+  }),
+);
+
 demoRouter.post(
   '/demo/tick',
   asyncHandler(async (_req, res) => {

@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Device keypad — MoMo Own It</title>
+    <link rel="stylesheet" href="/styles.css" />
+  </head>
+  <body>
+    <header class="topbar">
+      <div class="brand-mark"><span class="dot">M</span> MoMo Own It</div>
+      <div class="session-chip">
+        <a class="btn btn-ghost" href="/shop">Shop</a>
+        <a class="btn btn-ghost" href="/dashboard">Your plans</a>
+        <a class="btn btn-ghost" href="/demo">Controls</a>
+      </div>
+    </header>
+
+    <main class="page">
+      <h1>Device keypad</h1>
+      <p class="lede">
+        What the hardware does. A code is checked against a secret the device already holds, so this
+        works with no signal, no data and no smartphone. The counter is what blocks replay: a device
+        only accepts a code newer than the last one it took.
+      </p>
+
+      <div class="alert" id="device-alert" role="alert" aria-live="assertive"></div>
+
+      <div class="device-layout">
+        <div>
+          <div class="field">
+            <label for="device-plan">Plan</label>
+            <select id="device-plan"></select>
+            <span class="hint" id="device-hint">Each plan is a different device, with its own key.</span>
+          </div>
+
+          <div class="keypad-shell">
+            <div class="keypad-screen" id="keypad-screen">·········</div>
+            <div class="keypad" id="keypad">
+              <button class="key" type="button" data-key="1">1</button>
+              <button class="key" type="button" data-key="2">2</button>
+              <button class="key" type="button" data-key="3">3</button>
+              <button class="key" type="button" data-key="4">4</button>
+              <button class="key" type="button" data-key="5">5</button>
+              <button class="key" type="button" data-key="6">6</button>
+              <button class="key" type="button" data-key="7">7</button>
+              <button class="key" type="button" data-key="8">8</button>
+              <button class="key" type="button" data-key="9">9</button>
+              <button class="key key-wide" type="button" data-key="clear">Clear</button>
+              <button class="key" type="button" data-key="0">0</button>
+              <button class="key key-enter" type="button" data-key="enter">Enter</button>
+            </div>
+          </div>
+        </div>
+
+        <div>
+          <div class="panel" id="device-state">
+            <h3>Device memory</h3>
+            <p class="value" id="device-sequence">0</p>
+            <p><small>Last accepted counter, held on the device and nowhere else.</small></p>
+            <button class="btn btn-ghost" type="button" id="device-reset">Reset this device</button>
+          </div>
+
+          <div class="panel notice" id="device-result">
+            <h3>Waiting for a code</h3>
+            <p>Type the code from the plan page and press Enter.</p>
+          </div>
+
+          <p class="demo-note">
+            <strong>Try it twice.</strong>
+            The same code entered again is refused — the counter has already moved past it. That is
+            the whole anti-replay scheme, and it needs no clock and no connection.
+          </p>
+        </div>
+      </div>
+    </main>
+
+    <script src="/js/api.js"></script>
+    <script src="/js/device.js"></script>
+  </body>
+</html>

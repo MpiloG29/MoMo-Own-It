@@ -1,11 +1,14 @@
-import { env } from './config/env.js';
+//import { env } from './config/env.js';
+import dotenv from 'dotenv';
 import { pool } from './db/pool.js';
 import { createApp } from './http/app.js';
 import { logger } from './logger.js';
 import { startScheduler } from './scheduler/index.js';
 
+dotenv.config();
+const env = process.env;
 const app = createApp();
-const server = app.listen(env.PORT, () => {
+const server = app.listen(env.PORT || 5005, () => {
   logger.info('server.listening', { port: env.PORT, momoProvider: env.MOMO_PROVIDER });
 });
 

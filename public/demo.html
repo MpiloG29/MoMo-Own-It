@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Presenter controls — MoMo Own It</title>
+    <link rel="stylesheet" href="/styles.css" />
+  </head>
+  <body>
+    <header class="topbar">
+      <div class="brand-mark"><span class="dot">M</span> MoMo Own It</div>
+      <div class="session-chip">
+        <a class="btn btn-ghost" href="/shop">Shop</a>
+        <a class="btn btn-ghost" href="/supplier">Supplier</a>
+        <a class="btn btn-ghost" href="/device">Device</a>
+      </div>
+    </header>
+
+    <main class="page">
+      <h1>Presenter controls</h1>
+      <p class="lede">
+        The clock, on demand. Nothing here is buyer-facing — these are the demo endpoints, kept
+        separate in the API so they are trivial to strip before production.
+      </p>
+
+      <div class="alert" id="demo-alert" role="alert" aria-live="assertive"></div>
+
+      <div class="panel-grid" id="demo-health"></div>
+
+      <div class="panel notice">
+        <h3>Advance the whole world</h3>
+        <p>
+          Collects every instalment now due, then reconciles anything in flight. This moves
+          <em>all</em> plans at once — good for showing the engine running, blunt for telling a story.
+        </p>
+        <p>
+          One caveat worth knowing: a collection this server process did not start is unknown to the
+          mock provider, so a tick resolves it as failed. The seeded in-flight payment is the one
+          case — use <strong>Confirm as MoMo</strong> on that plan instead.
+        </p>
+        <button class="btn" type="button" id="run-tick">Run one collection cycle</button>
+        <p class="items-status" id="tick-result" hidden></p>
+      </div>
+
+      <h2>Plans</h2>
+      <p class="hint">
+        Per-plan controls touch nothing else, so they are the safe ones mid-presentation.
+      </p>
+      <p class="items-status" id="demo-status" role="status" aria-live="polite">Loading plans…</p>
+      <div id="demo-plans"></div>
+    </main>
+
+    <script src="/js/api.js"></script>
+    <script src="/js/demo.js"></script>
+  </body>
+</html>

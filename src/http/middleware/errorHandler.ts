@@ -12,6 +12,14 @@ export function errorHandler(err: unknown, req: Request, res: Response, _next: N
     return;
   }
 
+  // body-parser rejects a malformed body with a SyntaxError carrying the raw body.
+  if (err instanceof SyntaxError && 'body' in err) {
+    res.status(400).json({
+      error: { code: 'MALFORMED_JSON', message: 'Request body is not valid JSON.' },
+    });
+    return;
+  }
+
   if (err instanceof AppError) {
     res.status(err.status).json({
       error: { code: err.code, message: err.message, details: err.details },

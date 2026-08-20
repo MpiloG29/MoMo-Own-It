@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Your plans — MoMo Own It</title>
+    <link rel="stylesheet" href="/styles.css" />
+  </head>
+  <body>
+    <header class="topbar">
+      <div class="brand-mark"><span class="dot">M</span> MoMo Own It</div>
+      <div class="session-chip">
+        <a class="btn btn-ghost" href="/shop">Shop</a>
+        <a class="btn btn-ghost" href="/record">Record</a>
+        <span>Signed in as <span class="msisdn" id="session-msisdn">—</span></span>
+        <button class="btn btn-ghost" type="button" id="sign-out">Sign out</button>
+      </div>
+    </header>
+
+    <main class="page">
+      <h1>Your plans</h1>
+      <p class="lede">
+        Everything you are paying off, and what your payments say about you. Both modes sit on one
+        engine, so a plan looks the same here whether the item is held for you or already in use.
+      </p>
+
+      <div class="alert" id="home-alert" role="alert" aria-live="assertive"></div>
+      <p class="items-status" id="home-status" role="status" aria-live="polite">Loading your plans…</p>
+
+      <div class="panel-grid" id="home-record"></div>
+
+      <h2>Plans</h2>
+      <div id="home-plans"></div>
+    </main>
+
+    <script src="/js/session.js"></script>
+    <script src="/js/api.js"></script>
+    <script src="/js/dashboard.js"></script>
+  </body>
+</html>

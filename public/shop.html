@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Shop — MoMo Own It</title>
+    <link rel="stylesheet" href="/styles.css" />
+  </head>
+  <body>
+    <header class="topbar">
+      <div class="brand-mark"><span class="dot">M</span> MoMo Own It</div>
+      <div class="session-chip">
+        <a class="btn btn-ghost" href="/dashboard">Your plans</a>
+        <span>Signed in as <span class="msisdn" id="session-msisdn">—</span></span>
+        <button class="btn btn-ghost" type="button" id="sign-out">Sign out</button>
+      </div>
+    </header>
+
+    <main class="page">
+      <h1>Available items</h1>
+      <p class="lede">
+        Choose an item, then a weekly instalment inside the supplier's limits. Reserve items are held
+        until the last payment clears; Use It items go home with you on day one.
+      </p>
+
+      <div class="filters" id="mode-filters" role="group" aria-label="Filter by mode">
+        <button class="chip is-selected" type="button" data-mode="" aria-pressed="true">All</button>
+        <button class="chip" type="button" data-mode="reserve" aria-pressed="false">Reserve</button>
+        <button class="chip" type="button" data-mode="use_it" aria-pressed="false">Use It</button>
+      </div>
+
+      <p class="items-status" id="items-status" role="status" aria-live="polite">Loading items…</p>
+
+      <div class="panel-grid" id="items-container"></div>
+    </main>
+
+    <script src="/js/session.js"></script>
+    <script src="/js/api.js"></script>
+    <script src="/js/shop.js"></script>
+  </body>
+</html>

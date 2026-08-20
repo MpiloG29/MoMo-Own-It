@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Build a plan — MoMo Own It</title>
+    <link rel="stylesheet" href="/styles.css" />
+  </head>
+  <body>
+    <header class="topbar">
+      <div class="brand-mark"><span class="dot">M</span> MoMo Own It</div>
+      <div class="session-chip">
+        <a class="btn btn-ghost" href="/shop">Shop</a>
+        <span>Signed in as <span class="msisdn" id="session-msisdn">—</span></span>
+        <button class="btn btn-ghost" type="button" id="sign-out">Sign out</button>
+      </div>
+    </header>
+
+    <main class="page">
+      <a class="back-link" href="/shop">Back to shop</a>
+
+      <div class="alert" id="item-alert" role="alert" aria-live="assertive"></div>
+      <p class="items-status" id="item-status" role="status" aria-live="polite">Loading item…</p>
+
+      <div id="item-view" hidden>
+        <h1 id="item-title">—</h1>
+        <p class="lede" id="item-lede">—</p>
+
+        <div class="builder">
+          <div class="builder-media">
+            <img id="item-image" class="item-image" alt="" hidden />
+            <div class="panel" id="item-terms"></div>
+          </div>
+
+          <div class="builder-choice">
+            <h2>Choose your weekly instalment</h2>
+            <p class="hint" id="item-limits">—</p>
+
+            <div class="options" id="item-options" role="radiogroup" aria-label="Weekly instalment"></div>
+
+            <p class="quote" id="item-quote">Pick an instalment to see what it comes to.</p>
+
+            <button class="btn" type="button" id="start-plan" disabled>Start plan</button>
+
+            <p class="demo-note">
+              <strong>Instalment one is collected now.</strong>
+              Starting a plan asks MoMo for the first payment straight away. Nothing is reserved and
+              no device is released until that payment clears.
+            </p>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <script src="/js/session.js"></script>
+    <script src="/js/api.js"></script>
+    <script src="/js/item.js"></script>
+  </body>
+</html>

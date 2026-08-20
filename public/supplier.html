@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Supplier console — MoMo Own It</title>
+    <link rel="stylesheet" href="/styles.css" />
+  </head>
+  <body>
+    <header class="topbar">
+      <div class="brand-mark"><span class="dot">M</span> MoMo Own It</div>
+      <div class="session-chip">
+        <a class="btn btn-ghost" href="/shop">Shop</a>
+        <a class="btn btn-ghost" href="/demo">Controls</a>
+      </div>
+    </header>
+
+    <main class="page">
+      <h1>Supplier console</h1>
+      <p class="lede">
+        What you listed, every plan running against it, and whether the payout has landed. There is
+        no supplier login in this build — pick a supplier and the console is theirs.
+      </p>
+
+      <div class="alert" id="supplier-alert" role="alert" aria-live="assertive"></div>
+
+      <div class="field">
+        <label for="supplier-picker">Supplier</label>
+        <select id="supplier-picker"></select>
+      </div>
+
+      <p class="items-status" id="supplier-status" role="status" aria-live="polite">Loading suppliers…</p>
+
+      <div id="supplier-view" hidden>
+        <div class="panel-grid" id="supplier-summary"></div>
+
+        <h2>Plans against your stock</h2>
+        <div id="supplier-plans"></div>
+
+        <h2>Payouts</h2>
+        <p class="hint">
+          Reserve pays out once, on completion. A payout that stays pending is one whose callback
+          never landed — the reconciler retries it, nothing is lost.
+        </p>
+        <div id="supplier-payouts"></div>
+
+        <h2>Your listings</h2>
+        <div id="supplier-items"></div>
+
+        <h2>List an item</h2>
+        <p class="hint">
+          You set the limits: the smallest weekly instalment you will accept, and the longest a plan
+          may run. Buyers choose anything inside them.
+        </p>
+
+        <div class="form-grid">
+          <div class="field">
+            <label for="new-title">Title</label>
+            <input id="new-title" type="text" placeholder="Chest freezer 200L" />
+          </div>
+          <div class="field">
+            <label for="new-price">Price</label>
+            <input id="new-price" type="text" inputmode="decimal" placeholder="2600.00" />
+          </div>
+          <div class="field">
+            <label for="new-mode">Mode</label>
+            <select id="new-mode">
+              <option value="reserve">Reserve — you hold it</option>
+              <option value="use_it">Use It — they take it home</option>
+            </select>
+          </div>
+          <div class="field">
+            <label for="new-min">Smallest weekly instalment</label>
+            <input id="new-min" type="text" inputmode="decimal" placeholder="130.00" />
+          </div>
+          <div class="field">
+            <label for="new-weeks">Longest plan (weeks)</label>
+            <input id="new-weeks" type="text" inputmode="numeric" placeholder="26" />
+          </div>
+          <div class="field">
+            <label for="new-image">Image URL (optional)</label>
+            <input id="new-image" type="text" placeholder="https://…" />
+          </div>
+        </div>
+
+        <button class="btn btn-wide" type="button" id="list-item">List it</button>
+        <p class="items-status" id="new-item-status" hidden></p>
+      </div>
+    </main>
+
+    <script src="/js/api.js"></script>
+    <script src="/js/supplier.js"></script>
+  </body>
+</html>

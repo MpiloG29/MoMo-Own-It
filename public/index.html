@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Sign in — MoMo Own It</title>
+    <link rel="stylesheet" href="/styles.css" />
+  </head>
+  <body>
+    <main class="layout">
+      <section class="brand-panel">
+        <div class="brand-mark"><span class="dot">M</span> MoMo Own It</div>
+
+        <div class="brand-copy">
+          <h1>Own it on your terms.</h1>
+          <p>
+            Layby and pay-as-you-go, running as one payment engine on MTN MoMo. Pay weekly, watch
+            your balance fall, and keep a repayment record that is yours to take anywhere.
+          </p>
+        </div>
+
+        <div class="brand-modes">
+          <div class="mode">
+            <strong>Reserve</strong>
+            <span>Your supplier holds the item until the last instalment clears.</span>
+          </div>
+          <div class="mode">
+            <strong>Use It</strong>
+            <span>Take it home on day one and pay it off week by week.</span>
+          </div>
+        </div>
+      </section>
+
+      <section class="form-panel">
+        <div class="card">
+          <h2>Sign in</h2>
+          <p class="lede">Use the mobile number your payment plan is registered to.</p>
+
+          <div id="form-alert" class="alert" role="alert" aria-live="assertive"></div>
+
+          <form id="login-form" novalidate>
+            <div class="field">
+              <label for="msisdn">Mobile number</label>
+              <div class="phone-input">
+                <span class="prefix" aria-hidden="true">+</span>
+                <input
+                  id="msisdn"
+                  name="msisdn"
+                  type="tel"
+                  inputmode="numeric"
+                  autocomplete="tel"
+                  placeholder="27821234567"
+                  aria-describedby="msisdn-hint msisdn-error"
+                  required
+                />
+              </div>
+              <span class="hint" id="msisdn-hint">
+                Country code first, digits only - for example 27821234567.
+              </span>
+              <span class="field-error" id="msisdn-error"></span>
+            </div>
+
+            <div class="field">
+              <label for="password">Password</label>
+              <input
+                id="password"
+                name="password"
+                type="password"
+                autocomplete="current-password"
+                placeholder="Enter any password"
+                aria-describedby="password-error"
+                required
+              />
+              <span class="field-error" id="password-error"></span>
+            </div>
+
+            <button class="btn" type="submit" id="submit">Sign in</button>
+          </form>
+          
+        </div>
+      </section>
+    </main>
+
+    <script src="/js/session.js"></script>
+    <script src="/js/login.js"></script>
+  </body>
+</html>

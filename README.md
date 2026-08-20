@@ -33,6 +33,53 @@ npm run dev
 
 `GET /health` tells you whether the database is up and which MoMo provider is live.
 
+## Seed data
+
+`npm run seed` fills an empty database with three suppliers, nine items and
+eight plans — one per state the engine can be in: a plan that just started, one
+mid-way with a late payment, a Reserve plan completed and paid out, another
+completed whose payout callback never landed, a Use It plan running with a live
+unlock code, one behind with a dark device, one paid off and permanently
+unlocked, and one with a collection still awaiting confirmation.
+
+Every fixture is produced by running the real engine over a backdated clock, so
+ledgers, progress, unlock codes, collection codes and payout rows are exactly
+what the API would have written had the demo run for real. Timing follows
+`BILLING_PERIOD_SECONDS`, which means each plan's next instalment falls due
+about now and `POST /api/v1/demo/tick` has something to do immediately.
+
+It prints the ids, msisdns and codes you need to call the API and writes the
+same thing to `seed-data.json`. Seeded rows carry recognisable ids —
+`5eed0002-…-000000000004` is item four — so saved requests survive a re-seed.
+
+Re-running replaces the previous data: the seed deletes the rows in its own six
+tables first, and refuses to touch a table that does not carry this schema's
+columns.
+
+## Web
+
+Static files in [`public/`](public) are served by the same Express app, so the
+port in `PORT` serves both the buyer-facing UI and `/api/v1/*`. Pages call the
+API by path, never by origin: no build step, no second dev server, no CORS.
+
+| Page | What it is |
+|---|---|
+| `/` | sign in |
+| `/dashboard` | buyer home: every plan on this number, and the record so far |
+| `/shop` | browse by mode, expand an item into the plans its limits allow |
+| `/item?id=` | plan builder: pick an instalment, start the plan |
+| `/plan?id=` | one plan: progress, ledger, unlock code or collection code, pay ahead |
+| `/record` | the repayment record, and the download that makes it the customer's |
+| `/supplier` | supplier console: listings, plans, payouts, list a new item |
+| `/device?plan=` | the keypad, running the same check the firmware runs |
+| `/demo` | presenter controls: advance the clock, force a miss, confirm a payment |
+
+**The sign-in is a stub.** Identity in this system is an MSISDN and nothing else —
+there is no account, no credential, and no route that checks one — so the screen
+validates the shape of a mobile number, accepts any password, and keeps the
+number in `sessionStorage`. `public/js/session.js` is the single place to swap in
+a real token once an auth endpoint exists.
+
 ## Environment notes
 
 | Variable | Why it matters |
@@ -86,6 +133,7 @@ the same either way.
 Demo controls, kept separate so they are trivial to strip:
 
 | `POST` | `/api/v1/demo/tick` | run one collection cycle now |
+| `POST` | `/api/v1/demo/plans/:id/settle` | ask MoMo how this plan's in-flight collection resolved |
 | `POST` | `/api/v1/demo/plans/:id/collect-now` | force a collection |
 | `POST` | `/api/v1/demo/plans/:id/miss` | fail the in-flight payment — the lamp goes dark |
 | `POST` | `/api/v1/demo/unlock/verify` | the device-side check, over HTTP |
@@ -129,8 +177,9 @@ paths, both miss behaviours, replay rejection, and permanent unlock.
 
 ## Deliberately not built
 
-Variable payment amounts, multi-supplier search and ratings, refund and
-cancellation flows, real device provisioning at scale, and balance prediction
+Authentication and accounts, variable payment amounts, multi-supplier search and
+ratings, refund and cancellation flows, real device provisioning at scale, and
+balance prediction
 (third parties do not get visibility into a customer's wallet — we send a
 reminder before the due date instead).
 

@@ -1,3 +1,4 @@
+import path from 'node:path';
 import express from 'express';
 import { errorHandler } from './middleware/errorHandler.js';
 import { healthRouter } from './routes/health.js';
@@ -19,6 +20,9 @@ export function createApp() {
   app.use('/api/v1', plansRouter);
   app.use('/api/v1', recordsRouter);
   app.use(webhooksRouter);
+
+  
+  app.use(express.static(path.resolve(process.cwd(), 'public'), { extensions: ['html'] }));
 
   app.use((_req, res) => {
     res.status(404).json({ error: { code: 'NOT_FOUND', message: 'No such route.' } });

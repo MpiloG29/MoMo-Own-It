@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Your plan — MoMo Own It</title>
+    <link rel="stylesheet" href="/styles.css" />
+  </head>
+  <body>
+    <header class="topbar">
+      <div class="brand-mark"><span class="dot">M</span> MoMo Own It</div>
+      <div class="session-chip">
+        <a class="btn btn-ghost" href="/shop">Shop</a>
+        <span>Signed in as <span class="msisdn" id="session-msisdn">—</span></span>
+        <button class="btn btn-ghost" type="button" id="sign-out">Sign out</button>
+      </div>
+    </header>
+
+    <main class="page">
+      <a class="back-link" href="/shop">Back to shop</a>
+
+      <div class="alert" id="plan-alert" role="alert" aria-live="assertive"></div>
+      <p class="items-status" id="plan-status" role="status" aria-live="polite">Loading plan…</p>
+
+      <div id="plan-view" hidden>
+        <h1 id="plan-title">—</h1>
+        <p class="plan-badges">
+          <span class="tag" id="plan-mode"></span>
+          <span class="pill" id="plan-pill"></span>
+        </p>
+
+        <div class="progress"><span id="plan-bar"></span></div>
+        <p class="progress-line" id="plan-progress">—</p>
+
+        <div class="panel-grid" id="plan-facts"></div>
+
+        <div id="plan-possession"></div>
+        <div id="plan-actions"></div>
+
+        <h2>Payments</h2>
+        <div id="plan-ledger"></div>
+      </div>
+    </main>
+
+    <script src="/js/session.js"></script>
+    <script src="/js/api.js"></script>
+    <script src="/js/plan.js"></script>
+  </body>
+</html>
