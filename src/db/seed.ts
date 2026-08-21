@@ -85,7 +85,7 @@ interface PlanFixture {
   history: Step[];
   /** Reserve completion: has the payout callback landed, or is it still in flight? */
   payout?: 'settled' | 'pending';
-  /** Use It: age the live code out so the API reports a dark device. */
+  /** Take It Now: age the live code out so the API reports a dark device. */
   deviceDark?: boolean;
   note: string;
 }
@@ -93,7 +93,7 @@ interface PlanFixture {
 const SUPPLIERS: SupplierFixture[] = [
   // Override with MoMo sandbox test numbers before a live run.
   { ref: 1, name: 'Mahlangu Home Store', msisdn: process.env.SEED_RESERVE_SUPPLIER_MSISDN ?? '46733123450' },
-  { ref: 2, name: 'Kgosi Solar', msisdn: process.env.SEED_USEIT_SUPPLIER_MSISDN ?? '46733123451' },
+  { ref: 2, name: 'Kgosi Solar', msisdn: process.env.SEED_TAKEITNOW_SUPPLIER_MSISDN ?? '46733123451' },
   { ref: 3, name: 'Tshwane Mobile & Tech', msisdn: process.env.SEED_MIXED_SUPPLIER_MSISDN ?? '46733123452' },
 ];
 
@@ -134,7 +134,7 @@ const ITEMS: ItemFixture[] = [
     title: 'Solar home light + phone charger',
     imageUrl: 'https://picsum.photos/seed/momo-solar-light/640/480',
     priceCents: 90_000,
-    mode: 'use_it',
+    mode: 'take_it_now',
     minWeeklyCents: 5_000,
     maxWeeks: 24,
   },
@@ -144,7 +144,7 @@ const ITEMS: ItemFixture[] = [
     title: 'Solar TV bundle',
     imageUrl: 'https://picsum.photos/seed/momo-solar-tv/640/480',
     priceCents: 240_000,
-    mode: 'use_it',
+    mode: 'take_it_now',
     minWeeklyCents: 10_000,
     maxWeeks: 30,
   },
@@ -154,7 +154,7 @@ const ITEMS: ItemFixture[] = [
     title: 'Solar water pump',
     imageUrl: 'https://picsum.photos/seed/momo-pump/640/480',
     priceCents: 320_000,
-    mode: 'use_it',
+    mode: 'take_it_now',
     minWeeklyCents: 16_000,
     maxWeeks: 26,
   },
@@ -164,7 +164,7 @@ const ITEMS: ItemFixture[] = [
     title: 'Entry Android smartphone',
     imageUrl: 'https://picsum.photos/seed/momo-phone/640/480',
     priceCents: 200_000,
-    mode: 'use_it',
+    mode: 'take_it_now',
     minWeeklyCents: 8_000,
     maxWeeks: 30,
   },
@@ -240,7 +240,7 @@ const PLANS: PlanFixture[] = [
     buyerMsisdn: BUYERS.thabo,
     weeklyAmountCents: 10_000,
     history: ['paid', 'paid', 'paid'],
-    note: 'Use It, running: device unlocked, live code on the plan.',
+    note: 'Take It Now, running: device unlocked, live code on the plan.',
   },
   {
     ref: 6,
@@ -249,7 +249,7 @@ const PLANS: PlanFixture[] = [
     weeklyAmountCents: 25_000,
     history: ['paid', 'paid', 'missed'],
     deviceDark: true,
-    note: 'Use It, behind: the missed week ran the code out and the device is locked. Rounds to 10 weeks with a smaller final instalment.',
+    note: 'Take It Now, behind: the missed week ran the code out and the device is locked. Rounds to 10 weeks with a smaller final instalment.',
   },
   {
     ref: 7,
@@ -257,7 +257,7 @@ const PLANS: PlanFixture[] = [
     buyerMsisdn: BUYERS.sipho,
     weeklyAmountCents: 50_000,
     history: ['paid', 'paid', 'paid', 'paid'],
-    note: 'Use It, paid off: permanent unlock, no more codes ever.',
+    note: 'Take It Now, paid off: permanent unlock, no more codes ever.',
   },
   {
     ref: 8,
@@ -265,7 +265,7 @@ const PLANS: PlanFixture[] = [
     buyerMsisdn: BUYERS.lerato,
     weeklyAmountCents: 20_000,
     history: ['paid', 'paid', 'in_flight'],
-    note: 'Use It with a collection awaiting confirmation — settle it by POSTing the webhook below.',
+    note: 'Take It Now with a collection awaiting confirmation — settle it by POSTing the webhook below.',
   },
 ];
 
@@ -517,7 +517,7 @@ async function report(seeded: Awaited<ReturnType<typeof seed>>) {
 
   const plans = await Promise.all(
     seeded.plans.map(async ({ plan, item, note, pendingPaymentReference }) => {
-      const code = plan.mode === 'use_it' ? await unlockCodesRepo.latest(plan.id) : null;
+      const code = plan.mode === 'take_it_now' ? await unlockCodesRepo.latest(plan.id) : null;
       const disbursement =
         plan.mode === 'reserve' ? await disbursementsRepo.findByPlan(plan.id) : null;
 
@@ -617,14 +617,14 @@ async function report(seeded: Awaited<ReturnType<typeof seed>>) {
   lines.push('TRY IT');
   lines.push(`  curl ${base}/health`);
   lines.push(`  curl ${base}/api/v1/items`);
-  lines.push(`  curl ${base}/api/v1/items?mode=use_it`);
+  lines.push(`  curl ${base}/api/v1/items?mode=take_it_now`);
   lines.push(`  curl ${base}/api/v1/items/${summary.items[0]!.id}/plan-options`);
   lines.push(`  curl ${base}/api/v1/suppliers/${summary.suppliers[0]!.id}/plans`);
   lines.push(`  curl ${base}/api/v1/plans/${plans[1]!.id}`);
   lines.push(`  curl ${base}/api/v1/buyers/${BUYERS.thabo}/plans`);
   lines.push(`  curl ${base}/api/v1/records/${BUYERS.sipho}`);
-  const useIt = plans.find((p) => p.unlock && !p.unlock.permanent && !p.unlock.locked);
-  if (useIt) lines.push(`  curl ${base}/api/v1/plans/${useIt.id}/unlock`);
+  const takeItNow = plans.find((p) => p.unlock && !p.unlock.permanent && !p.unlock.locked);
+  if (takeItNow) lines.push(`  curl ${base}/api/v1/plans/${takeItNow.id}/unlock`);
   const inFlight = plans.find((p) => p.pendingPaymentReference);
   if (inFlight) {
     lines.push('');

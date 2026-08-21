@@ -11,7 +11,7 @@
   if (!session) return;
   window.MoMo.mountSession(session);
 
-  var MODE_LABEL = { reserve: 'Reserve', use_it: 'Use It' };
+  var MODE_LABEL = { reserve: 'Reserve', take_it_now: 'Take It Now' };
 
   var status = document.getElementById('home-status');
   var alertBox = document.getElementById('home-alert');

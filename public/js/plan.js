@@ -1,6 +1,6 @@
 /**
  * One plan: progress, what a miss costs, the ledger, and either the unlock code
- * (Use It) or the collection code and payout (Reserve).
+ * (Take It Now) or the collection code and payout (Reserve).
  *
  * `GET /plans/:id` returns all of it in one response — plan, item, computed
  * progress, every payment, unlock state and payout state — so this page reads
@@ -11,7 +11,7 @@
   if (!session) return;
   window.MoMo.mountSession(session);
 
-  var MODE_LABEL = { reserve: 'Reserve', use_it: 'Use It' };
+  var MODE_LABEL = { reserve: 'Reserve', take_it_now: 'Take It Now' };
   var SETTLE_ATTEMPTS = 6;
   var SETTLE_DELAY_MS = 800;
 
@@ -106,7 +106,7 @@
       fact(
         'Weeks missed',
         String(plan.missedCount),
-        plan.mode === 'use_it'
+        plan.mode === 'take_it_now'
           ? 'A miss darkens the device until the next payment'
           : 'A miss stretches the plan; nothing is lost',
       ) +
@@ -116,7 +116,7 @@
 
   /** Fork one of two, as the buyer experiences it: who holds the thing. */
   function possession(plan, unlock, disbursement) {
-    if (plan.mode === 'use_it') return unlockPanel(plan, unlock);
+    if (plan.mode === 'take_it_now') return unlockPanel(plan, unlock);
 
     if (plan.status !== 'complete') {
       return (

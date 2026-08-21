@@ -69,7 +69,7 @@ export async function view(planId: string): Promise<PlanView> {
     paymentsRepo.listByPlan(planId),
   ]);
 
-  const unlock = plan.mode === 'use_it' ? await unlockService.currentFor(planId) : null;
+  const unlock = plan.mode === 'take_it_now' ? await unlockService.currentFor(planId) : null;
   // Reserve pays out once, on completion — this is how the supplier (or the buyer) checks whether it landed.
   const disbursement = plan.mode === 'reserve' ? await disbursementsRepo.findByPlan(planId) : null;
 

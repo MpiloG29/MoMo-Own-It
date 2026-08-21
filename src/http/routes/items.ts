@@ -19,7 +19,7 @@ itemsRouter.post(
 itemsRouter.get(
   '/items',
   asyncHandler(async (req, res) => {
-    const mode = req.query.mode === 'reserve' || req.query.mode === 'use_it' ? req.query.mode : undefined;
+    const mode = req.query.mode === 'reserve' || req.query.mode === 'take_it_now' ? req.query.mode : undefined;
     res.json(await itemsRepo.list({ mode }));
   }),
 );

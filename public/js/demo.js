@@ -8,7 +8,7 @@
  *   force a miss  — fail the in-flight payment, and the lamp goes dark
  */
 (function () {
-  var MODE_LABEL = { reserve: 'Reserve', use_it: 'Use It' };
+  var MODE_LABEL = { reserve: 'Reserve', take_it_now: 'Take It Now' };
 
   var status = document.getElementById('demo-status');
   var alertBox = document.getElementById('demo-alert');

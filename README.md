@@ -4,7 +4,7 @@ Layby and pay-as-you-go, running as one payment engine on MTN MoMo.
 
 Two modes, one codebase:
 
-| | **Reserve** (layby) | **Use It** (pay-as-you-go) |
+| | **Reserve** (layby) | **Take It Now** (pay-as-you-go) |
 |---|---|---|
 | Who holds the item | Supplier | Customer, from day one |
 | If payments stop | Plan pauses, nothing is lost | Device locks until payments resume |
@@ -22,23 +22,55 @@ record-building — is shared.
 
 ## Run it
 
+Needs Node 20+ and Docker.
+
 ```bash
-cp .env.example .env        # fill it in; see the notes below
-docker compose up -d db
+cp .env.example .env        # working demo defaults, nothing to fill in
+docker compose up -d db     # wait for it to report healthy
 npm install
 npm run migrate
 npm run seed
 npm run dev
 ```
 
-`GET /health` tells you whether the database is up and which MoMo provider is live.
+Then open <http://localhost:8090>. `GET /health` tells you whether the database
+is up and which MoMo provider is live.
+
+The copied `.env` runs entirely on `MOMO_PROVIDER=mock` — no MoMo credentials, no
+network — with the billing clock at twenty seconds per "week" so plans move while
+you watch. Two of its values are what make the demo *live* rather than static:
+`SCHEDULER_ENABLED=true` and `BILLING_PERIOD_SECONDS=20`. With the scheduler off,
+or the clock at a real week, everything loads and then nothing ever happens.
+
+**If port 5432 is already taken** — you have Postgres installed natively — `docker
+compose up` fails to bind. Publish the container somewhere else instead:
+
+```bash
+cat > docker-compose.override.yml <<'EOF'
+services:
+  db:
+    ports:
+      - "5455:5432"
+EOF
+```
+
+Then point `DATABASE_URL` at 5455 in your `.env`. The override file is gitignored,
+so it stays local to your machine.
+
+To wipe the database and start over — also what to run after editing
+`001_init.sql`, since migrations are tracked by filename and an edited one never
+re-applies:
+
+```bash
+npm run db:reset            # drop, migrate, seed
+```
 
 ## Seed data
 
 `npm run seed` fills an empty database with three suppliers, nine items and
 eight plans — one per state the engine can be in: a plan that just started, one
 mid-way with a late payment, a Reserve plan completed and paid out, another
-completed whose payout callback never landed, a Use It plan running with a live
+completed whose payout callback never landed, a Take It Now plan running with a live
 unlock code, one behind with a dark device, one paid off and permanently
 unlocked, and one with a collection still awaiting confirmation.
 
@@ -46,7 +78,7 @@ Every fixture is produced by running the real engine over a backdated clock, so
 ledgers, progress, unlock codes, collection codes and payout rows are exactly
 what the API would have written had the demo run for real. Timing follows
 `BILLING_PERIOD_SECONDS`, which means each plan's next instalment falls due
-about now and `POST /api/v1/demo/tick` has something to do immediately.
+about now and the collection loop has something to do immediately.
 
 It prints the ids, msisdns and codes you need to call the API and writes the
 same thing to `seed-data.json`. Seeded rows carry recognisable ids —
@@ -118,7 +150,7 @@ the same either way.
 | `POST` | `/api/v1/suppliers` | register a supplier |
 | `GET` | `/api/v1/suppliers/:id/plans` | supplier dashboard: items, plans, and disbursement (payout) status |
 | `POST` | `/api/v1/items` | list an item with its plan limits |
-| `GET` | `/api/v1/items?mode=reserve\|use_it` | browse |
+| `GET` | `/api/v1/items?mode=reserve\|take_it_now` | browse |
 | `GET` | `/api/v1/items/:id/plan-options` | every plan the supplier's limits allow |
 | `POST` | `/api/v1/plans` | start a plan (collects instalment one immediately) |
 | `GET` | `/api/v1/plans/:id` | plan, progress, ledger, unlock state, disbursement state |
@@ -130,13 +162,8 @@ the same either way.
 | `POST` | `/webhooks/momo/collection/:referenceId?` | MoMo callback |
 | `POST` | `/webhooks/momo/disbursement/:referenceId?` | MoMo callback |
 
-Demo controls, kept separate so they are trivial to strip:
-
-| `POST` | `/api/v1/demo/tick` | run one collection cycle now |
-| `POST` | `/api/v1/demo/plans/:id/settle` | ask MoMo how this plan's in-flight collection resolved |
-| `POST` | `/api/v1/demo/plans/:id/collect-now` | force a collection |
-| `POST` | `/api/v1/demo/plans/:id/miss` | fail the in-flight payment — the lamp goes dark |
-| `POST` | `/api/v1/demo/unlock/verify` | the device-side check, over HTTP |
+Presenter-only controls used by the demo screens are mounted on their own router,
+undocumented here and removable in a single line before any deployment.
 
 ## Design decisions worth knowing
 
@@ -152,7 +179,7 @@ poller in `reconcilePending`.
 events, the transaction commits, then side effects dispatch. A dropped
 disbursement callback leaves a `pending` row; `disbursementService.reconcilePending`
 polls it the same way `collectionService.reconcilePending` polls stuck
-collections — both run on every scheduler tick and every `/demo/tick`, so
+collections — both run on every scheduler tick, so
 nothing is settled only by hoping a webhook lands.
 
 **Unlock codes are offline.** `HMAC(deviceKey, sequence:days)` truncated to nine
@@ -164,28 +191,31 @@ ESP32 runs, kept here so firmware and backend test against the same vectors.
 **The repayment record is derived, never authored.** It is a query over what
 actually happened. Not a requirement, not a gate, not ours.
 
-## Tests
-
-```bash
-npm test
-```
-
-No database or network required — the engine, the code scheme and the payment
-provider are all tested in isolation. Covers plan quoting against supplier
-limits, rounding into the final instalment, the shared ledger, both completion
-paths, both miss behaviours, replay rejection, and permanent unlock.
-
 ## Deliberately not built
 
-Authentication and accounts, variable payment amounts, multi-supplier search and
-ratings, refund and cancellation flows, real device provisioning at scale, and
-balance prediction
-(third parties do not get visibility into a customer's wallet — we send a
-reminder before the due date instead).
+This is a skeleton. It demonstrates the engine and the shape of the system, not
+a finished product. The following are described in the concept but are **not in
+this codebase** — they are named here so the gap is stated rather than
+discovered:
+
+| Not built | Note |
+|---|---|
+| **Due-date reminders** | The concept sends a nudge before each collection. Nothing here schedules or sends one; the scheduler only collects. |
+| **SMS delivery of unlock codes** | Codes are generated and returned over the API and shown in the UI. There is no SMS gateway integration, so "sent by SMS" is not yet true. |
+| **KYC re-verification on a changed number** | Identity is an MSISDN and nothing else. No MoMo KYC call exists, so changing a number is not detected or challenged. |
+| **Reserve expiry, refund and the supplier holding fee** | `PlanStatus` includes `cancelled` and the database constrains for it, but no code path sets it. The expiry-and-split rule is designed, not implemented. |
+| **Trust account separation for Reserve balances** | A deployment requirement, not a code feature. Funds flow through MoMo; nothing here segregates them. |
+| **Device-fault pause** | A genuine hardware fault should pause a plan without touching the record. No pause state exists. |
+| **Missed-scheduling attribution** | Our own scheduler failures should be logged as our fault, never counted against the buyer. Misses are currently recorded the same way whatever the cause. |
+| **Authentication and accounts** | The sign-in is a stub; no route checks a credential. |
+| **Variable payment amounts** | A plan has one instalment size, fixed at start. |
+| **Multi-supplier search and ratings** | Browse is a flat list filtered by mode. |
+| **Real device provisioning at scale** | Unlock codes are correct and offline-verifiable, but there is no fleet, key rotation or firmware pipeline. |
+| **Balance prediction** | Deliberate, not missing: third parties do not get visibility into a customer's wallet. The concept sends a reminder before the due date instead — see the first row. |
 
 ## Not legal advice
 
-Reserve is structured as a deposit arrangement; Use It as instalment credit. In
+Reserve is structured as a deposit arrangement; Take It Now as instalment credit. In
 both cases the supplier is the principal and this service is the payment and
 servicing rail. Any commercial deployment needs the agreements reviewed, credit
 provider registration confirmed on the supplier side, and Reserve balances held

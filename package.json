@@ -3,16 +3,18 @@
   "version": "0.1.0",
   "private": true,
   "type": "module",
-  "engines": { "node": ">=20" },
+  "engines": {
+    "node": ">=20"
+  },
   "scripts": {
     "dev": "tsx watch src/server.ts",
     "build": "tsc -p tsconfig.json",
     "start": "node dist/server.js",
     "migrate": "tsx src/db/migrate.ts",
     "seed": "tsx src/db/seed.ts",
+    "db:reset": "tsx src/db/reset.ts && npm run migrate && npm run seed",
     "provision:sandbox": "tsx scripts/provision-sandbox.ts",
-    "typecheck": "tsc --noEmit",
-    "test": "vitest run"
+    "typecheck": "tsc --noEmit"
   },
   "dependencies": {
     "dotenv": "^16.4.5",
@@ -25,7 +27,6 @@
     "@types/node": "^20.14.11",
     "@types/pg": "^8.11.6",
     "tsx": "^4.16.2",
-    "typescript": "^5.5.4",
-    "vitest": "^2.0.5"
+    "typescript": "^5.5.4"
   }
 }

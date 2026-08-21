@@ -28,9 +28,9 @@ export async function applyEvents(
   for (const event of events) {
     switch (event.type) {
       case 'plan.started': {
-        if (ctx.plan.mode === 'use_it') {
+        if (ctx.plan.mode === 'take_it_now') {
           // Possession is immediate, but the device stays dark until payment one.
-          logger.info('plan.started.use_it', { planId: ctx.plan.id });
+          logger.info('plan.started.take_it_now', { planId: ctx.plan.id });
         }
         break;
       }

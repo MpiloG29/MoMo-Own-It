@@ -1,15 +1,30 @@
 :root {
+  /* ---- Yellow / gold: primary CTAs, active states, highlights ---- */
   --momo-yellow: #ffcc00;
   --momo-yellow-dark: #e0b400;
-  --ink: #14110a;
-  --ink-soft: #2a2519;
+  --momo-yellow-tint: #fff8e1;
+  --momo-yellow-tint-strong: #ffeeb0;
+
+  /* ---- Dark teal: secondary actions, links, section headers, attention ---- */
+  --momo-teal: #0b4f60;
+  --momo-teal-bright: #0f6b80;
+  --momo-teal-tint: #e8f2f5;
+  --momo-teal-line: #b8d6de;
+
+  /* ---- Black: primary text and headings ---- */
+  --ink: #0a0a0a;
+  --ink-soft: #2f3639;
+
+  /* ---- White / light grey: backgrounds and card surfaces ---- */
   --paper: #ffffff;
-  --muted: #6b6455;
-  --line: #e5e0d4;
-  --danger: #b42318;
-  --danger-bg: #fef3f2;
+  --surface: #f4f6f7;
+  --surface-2: #e9edee;
+  --line: #dfe4e6;
+  --muted: #5f6b70;
+  --placeholder: #9aa5aa;
+
   --radius: 14px;
-  --shadow: 0 18px 40px -18px rgba(20, 17, 10, 0.35);
+  --shadow: 0 18px 40px -18px rgba(10, 10, 10, 0.28);
 }
 
 * {
@@ -45,7 +60,7 @@ body {
   justify-content: space-between;
   gap: 48px;
   padding: 56px;
-  background: radial-gradient(circle at 15% 15%, #2a2519 0%, var(--ink) 55%);
+  background: radial-gradient(circle at 15% 15%, var(--momo-teal) 0%, var(--ink) 62%);
   color: var(--paper);
 }
 
@@ -187,7 +202,7 @@ input[type='password'] {
 }
 
 input::placeholder {
-  color: #a8a294;
+  color: var(--placeholder);
 }
 
 input:focus {
@@ -197,11 +212,11 @@ input:focus {
 }
 
 input[aria-invalid='true'] {
-  border-color: var(--danger);
+  border-color: var(--momo-teal);
 }
 
 input[aria-invalid='true']:focus {
-  box-shadow: 0 0 0 4px rgba(180, 35, 24, 0.14);
+  box-shadow: 0 0 0 4px rgba(11, 79, 96, 0.16);
 }
 
 .phone-input {
@@ -215,7 +230,7 @@ input[aria-invalid='true']:focus {
   padding: 0 14px;
   color: var(--muted);
   font-size: 0.98rem;
-  background: #faf8f3;
+  background: var(--surface);
   border: 1px solid var(--line);
   border-right: 0;
   border-radius: 11px 0 0 11px;
@@ -228,7 +243,7 @@ input[aria-invalid='true']:focus {
 .field-error {
   display: none;
   margin-top: 7px;
-  color: var(--danger);
+  color: var(--momo-teal);
   font-size: 0.82rem;
 }
 
@@ -270,22 +285,24 @@ input[aria-invalid='true']:focus {
 
 .btn-ghost {
   width: auto;
-  color: var(--ink);
+  color: var(--momo-teal);
   background: transparent;
-  border: 1px solid var(--line);
+  border: 1px solid var(--momo-teal-line);
+  font-weight: 700;
 }
 
 .btn-ghost:hover {
-  background: #faf8f3;
+  background: var(--momo-teal-tint);
+  border-color: var(--momo-teal);
 }
 
 .alert {
   display: none;
   margin-bottom: 22px;
   padding: 13px 15px;
-  color: var(--danger);
-  background: var(--danger-bg);
-  border: 1px solid #fecdc9;
+  color: var(--momo-teal);
+  background: var(--momo-teal-tint);
+  border: 1px solid var(--momo-teal-line);
   border-radius: 11px;
   font-size: 0.9rem;
   line-height: 1.45;
@@ -298,7 +315,7 @@ input[aria-invalid='true']:focus {
 .demo-note {
   margin-top: 28px;
   padding: 15px 16px;
-  background: #fffbe8;
+  background: var(--momo-yellow-tint);
   border: 1px dashed var(--momo-yellow-dark);
   border-radius: 11px;
   color: var(--ink-soft);
@@ -394,7 +411,7 @@ input[aria-invalid='true']:focus {
   font-weight: 700;
   letter-spacing: 0.08em;
   text-transform: uppercase;
-  color: var(--muted);
+  color: var(--momo-teal);
 }
 
 .panel p {
@@ -439,7 +456,7 @@ a.btn {
 }
 
 .chip:hover {
-  background: #faf8f3;
+  background: var(--surface);
 }
 
 .chip.is-selected {
@@ -468,7 +485,7 @@ a.btn {
   width: 100%;
   height: 170px;
   object-fit: cover;
-  background: #faf8f3;
+  background: var(--surface);
   border-bottom: 1px solid var(--line);
 }
 
@@ -491,11 +508,11 @@ a.btn {
 
 .tag-reserve {
   color: var(--ink);
-  background: #fff3c4;
+  background: var(--momo-yellow-tint-strong);
   border: 1px solid var(--momo-yellow-dark);
 }
 
-.tag-use_it {
+.tag-take_it_now {
   color: var(--momo-yellow);
   background: var(--ink);
 }
@@ -552,7 +569,7 @@ a.btn {
 }
 
 .item-note.is-error {
-  color: var(--danger);
+  color: var(--momo-teal);
 }
 
 /* ---------- Plan builder ---------- */
@@ -560,7 +577,8 @@ a.btn {
 .back-link {
   display: inline-block;
   margin-bottom: 18px;
-  color: var(--muted);
+  color: var(--momo-teal);
+  font-weight: 600;
   font-size: 0.88rem;
   text-decoration: none;
 }
@@ -571,7 +589,8 @@ a.btn {
 }
 
 .back-link:hover {
-  color: var(--ink);
+  color: var(--momo-teal-bright);
+  text-decoration: underline;
 }
 
 .btn-wide {
@@ -627,12 +646,12 @@ a.btn {
 }
 
 .option:hover {
-  background: #faf8f3;
+  background: var(--surface);
 }
 
 .option.is-selected {
   border-color: var(--momo-yellow-dark);
-  background: #fffbe8;
+  background: var(--momo-yellow-tint);
   box-shadow: 0 0 0 3px rgba(255, 204, 0, 0.22);
 }
 
@@ -673,20 +692,20 @@ a.btn {
   font-weight: 700;
   letter-spacing: 0.05em;
   text-transform: uppercase;
-  background: #f1eee6;
+  background: var(--surface-2);
   color: var(--ink-soft);
 }
 
 .pill-active,
 .pill-successful {
-  background: #e7f6ec;
-  color: #17603a;
+  background: var(--momo-yellow);
+  color: var(--ink);
 }
 
 .pill-behind,
 .pill-failed {
-  background: var(--danger-bg);
-  color: var(--danger);
+  background: var(--momo-teal);
+  color: var(--paper);
 }
 
 .pill-complete {
@@ -695,15 +714,16 @@ a.btn {
 }
 
 .pill-pending {
-  background: #fffbe8;
-  color: #7a5c00;
+  background: var(--surface-2);
+  color: var(--momo-teal);
+  box-shadow: inset 0 0 0 1px var(--momo-teal-line);
 }
 
 .progress {
   display: block;
   height: 12px;
   overflow: hidden;
-  background: #f1eee6;
+  background: var(--surface-2);
   border-radius: 999px;
 }
 
@@ -728,12 +748,12 @@ a.btn {
 
 .notice.is-good {
   border-color: var(--momo-yellow-dark);
-  background: #fffbe8;
+  background: var(--momo-yellow-tint);
 }
 
 .notice.is-bad {
-  border-color: #fecdc9;
-  background: var(--danger-bg);
+  border-color: var(--momo-teal-line);
+  background: var(--momo-teal-tint);
 }
 
 .notice p {
@@ -774,7 +794,7 @@ a.btn {
   font-weight: 700;
   letter-spacing: 0.07em;
   text-transform: uppercase;
-  color: var(--muted);
+  color: var(--momo-teal);
 }
 
 .ledger td small {
@@ -872,7 +892,7 @@ p.hint {
   padding: 18px 14px;
   margin-bottom: 16px;
   color: var(--momo-yellow);
-  background: #0b0906;
+  background: #000000;
   border-radius: 10px;
   font-size: 1.7rem;
   font-variant-numeric: tabular-nums;
@@ -966,12 +986,12 @@ p.hint {
 }
 
 .btn-ghost.is-danger {
-  color: var(--danger);
-  border-color: #fecdc9;
+  color: var(--momo-teal);
+  border-color: var(--momo-teal-line);
 }
 
 .btn-ghost.is-danger:hover {
-  background: var(--danger-bg);
+  background: var(--momo-teal-tint);
 }
 
 .control-note {

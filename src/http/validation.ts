@@ -15,7 +15,7 @@ export const createItemSchema = z.object({
   title: z.string().min(2).max(160),
   imageUrl: z.string().url().nullish(),
   priceCents: cents,
-  mode: z.enum(['reserve', 'use_it']),
+  mode: z.enum(['reserve', 'take_it_now']),
   minWeeklyCents: cents,
   maxWeeks: z.number().int().min(1).max(260),
 });

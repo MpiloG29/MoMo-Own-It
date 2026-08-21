@@ -21,9 +21,9 @@
 
   var preselected = new URLSearchParams(window.location.search).get('plan');
 
-  // Every Use It plan is a device. Reserve plans have no lock, so they are left out.
+  // Every Take It Now plan is a device. Reserve plans have no lock, so they are left out.
   window.MoMo
-    .get('/items?mode=use_it')
+    .get('/items?mode=take_it_now')
     .then(function (items) {
       var suppliers = items
         .map(function (item) {
@@ -50,14 +50,14 @@
         });
 
         dashboard.plans.forEach(function (plan) {
-          if (plan.mode !== 'use_it' || seen[plan.id]) return;
+          if (plan.mode !== 'take_it_now' || seen[plan.id]) return;
           seen[plan.id] = true;
           plans.push({ id: plan.id, label: (titles[plan.itemId] || 'Device') + ' — +' + plan.buyerMsisdn });
         });
       });
 
       if (!plans.length) {
-        window.MoMo.show(alertBox, 'No Use It plans exist yet. Run "npm run seed" or start one in the shop.');
+        window.MoMo.show(alertBox, 'No Take It Now plans exist yet. Run "npm run seed" or start one in the shop.');
         return;
       }
 

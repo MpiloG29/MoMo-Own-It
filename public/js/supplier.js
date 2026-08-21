@@ -6,7 +6,7 @@
  * what did I list, who is paying it off, and did my money arrive.
  */
 (function () {
-  var MODE_LABEL = { reserve: 'Reserve', use_it: 'Use It' };
+  var MODE_LABEL = { reserve: 'Reserve', take_it_now: 'Take It Now' };
 
   var picker = document.getElementById('supplier-picker');
   var status = document.getElementById('supplier-status');

@@ -2,7 +2,7 @@
  * Money is always integer minor units (cents). Never floats.
  * Mode is a flag on one engine — see domain/plan.ts for the only two places it forks.
  */
-export type Mode = 'reserve' | 'use_it';
+export type Mode = 'reserve' | 'take_it_now';
 export type Possession = 'on_completion' | 'immediate';
 export type PlanStatus = 'active' | 'behind' | 'complete' | 'cancelled';
 export type PaymentStatus = 'pending' | 'successful' | 'failed';

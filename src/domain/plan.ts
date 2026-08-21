@@ -4,7 +4,7 @@ import type { Item, Mode, Plan, Possession } from './types.js';
 /**
  * The engine.
  *
- * Reserve (layby) and Use It (pay-as-you-go) share one Plan object and one
+ * Reserve (layby) and Take It Now (pay-as-you-go) share one Plan object and one
  * collection loop. The mode forks the logic in exactly two places:
  *
  *   1. possessionFor()   — at plan start, does the item release now or is it held?
@@ -39,7 +39,7 @@ export interface PlanQuote {
 // Fork 1 of 2: possession
 // ---------------------------------------------------------------------------
 export function possessionFor(mode: Mode): Possession {
-  return mode === 'use_it' ? 'immediate' : 'on_completion';
+  return mode === 'take_it_now' ? 'immediate' : 'on_completion';
 }
 
 // ---------------------------------------------------------------------------
@@ -191,7 +191,7 @@ export function applyPayment(args: {
     const base = Math.max(now.getTime(), Date.parse(plan.nextDueAt ?? now.toISOString()));
     next.nextDueAt = new Date(base + periods * periodSeconds * 1000).toISOString();
 
-    if (next.mode === 'use_it') {
+    if (next.mode === 'take_it_now') {
       events.push({
         type: 'unlock.issue',
         planId: next.id,
@@ -222,7 +222,7 @@ export function onMissedPayment(args: {
     status: 'behind',
     missedCount: plan.missedCount + 1,
     // Reserve: the plan simply stretches, nothing is lost.
-    // Use It: the plan also stretches, but the live unlock code runs out and
+    // Take It Now: the plan also stretches, but the live unlock code runs out and
     // the device goes dark until the next successful payment. No rollover debt
     // and no penalty in either mode — the item itself is the only security.
     nextDueAt: new Date(
@@ -236,7 +236,7 @@ export function onMissedPayment(args: {
       {
         type: 'plan.behind',
         planId: next.id,
-        payload: { mode: next.mode, locks: next.mode === 'use_it', missedCount: next.missedCount },
+        payload: { mode: next.mode, locks: next.mode === 'take_it_now', missedCount: next.missedCount },
       },
     ],
   };

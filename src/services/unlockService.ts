@@ -48,7 +48,7 @@ export async function currentFor(planId: string): Promise<{
   const code = await unlockCodes.latest(planId);
   const permanentlyUnlocked = Boolean(code?.permanent);
   const locked =
-    plan.mode === 'use_it' &&
+    plan.mode === 'take_it_now' &&
     !permanentlyUnlocked &&
     (!code || (code.expiresAt !== null && Date.parse(code.expiresAt) <= Date.now()));
 

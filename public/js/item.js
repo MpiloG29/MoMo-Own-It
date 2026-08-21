@@ -11,10 +11,10 @@
   if (!session) return;
   window.MoMo.mountSession(session);
 
-  var MODE_LABEL = { reserve: 'Reserve', use_it: 'Use It' };
+  var MODE_LABEL = { reserve: 'Reserve', take_it_now: 'Take It Now' };
   var POSSESSION_COPY = {
     reserve: 'Your supplier holds it until the last instalment clears.',
-    use_it: 'It goes home with you on day one and stays on while payments land.',
+    take_it_now: 'It goes home with you on day one and stays on while payments land.',
   };
 
   var itemId = new URLSearchParams(window.location.search).get('id');

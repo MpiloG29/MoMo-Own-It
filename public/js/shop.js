@@ -2,7 +2,7 @@
 (function () {
   var API = '/api/v1';
 
-  var MODE_LABEL = { reserve: 'Reserve', use_it: 'Use It' };
+  var MODE_LABEL = { reserve: 'Reserve', take_it_now: 'Take It Now' };
 
   var session = window.Session.requireSignedIn();
   if (!session) return;
